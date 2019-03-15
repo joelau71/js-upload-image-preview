@@ -1,7 +1,22 @@
-/* 
-    model: width, height, both, non;
-*/
+/*
+    jquery required
+    <input type="file" name="upload" class="upload" data-uiw-width="728" data-uiw-height="90">
 
+    upload_image_widget.init($class);
+    e.g.: upload_image_widget.init($(".upload"));
+
+    upload_image_widget.generate(name, width, height) will return html element
+    name: input attribute name
+    width: container width
+    height: container height
+    e.g.: var element = upload_image_widget.generate("upload", 390, 300);
+
+    status:
+    "": no image
+    static: no change, but have the image
+    remove: remove the image
+    update: update the image
+*/
 upload_image_widget = {
     status: "inactive",
     init: function($class){
@@ -17,17 +32,13 @@ upload_image_widget = {
                 var path = $this.attr("data-uiw-path");
                 var width = $this.attr("data-uiw-width");
                 var height = $this.attr("data-uiw-height");
-                var mode = $this.attr("data-uiw-mode");
                 var del = $this.attr("data-uiw-del");
-                var className = $this.attr("class");
                 var source = {
                     field: field,
                     width: width,
                     height: height,
-                    mode: mode,
                     path: path,
-                    del: del,
-                    className: className
+                    del: del
                 };
                 var element = self.generate(source);
                 $this.remove();
@@ -71,29 +82,42 @@ upload_image_widget = {
         });
     },
 
-    //set width and height, but effect cover or contain
-    fixed: function(s){
+    generate: function(source){
+        var _default = {
+            field: 'upload',
+            width: 300,
+            height: 300,
+            path: '',
+            del: false
+        };
         var html = "";
-        var file = "";
+        var field = source.field || _default.field;
+        var width = source.width || _default.width;
+        var height = source.height || _default.height;
+        var del = source.del || _default.del;
+        var path = source.path || _default.path;
         var background = "";
+        var has_data = "";
         var status = "";
-        var has_data = ""
 
-        if (s.path !== '') {
-            background = "background-image:url(" + s.path +");";
+        if (this.status == "inactive"){
+            this.init();
+        }
+
+        if (path !== '') {
+            background = "background-image:url(" + path +");";
             has_data = " has-data";
             status = "static";
         }
 
-        html += "<div class='upload-image-widget " + has_data + " "+ s.mode + "' style='width:" + s.width + "px;height:" + s.height + "px;" + background + "'>";
+        html += "<div class='upload-image-widget" + has_data + "' style='width:" + width + "px;height:" + height + "px;" + background + "'>";
         html += "<label class='uiw-image-label'>";
-        html += "<input type='file' name='" + s.field + "' class='uiw-image "+ s.className + "' value=''>";
+        html += "<input type='file' name='" + field + "' class='uiw-image' value=''>";
         html += "<span>";
         html += "UPLOAD";
         html += "</span>";
         html += "</label>";
-
-        if (s.del) {
+        if (del) {
             html += "<div class='uiw-del'>";
             html += "</div>";
         } else {
@@ -102,86 +126,12 @@ upload_image_widget = {
         }
         html += "<div class='uiw-change'>";
         html += "</div>";
-        if (s.path != "") {
-            file = s.path.split("/").pop();
-            html += "<input type='hidden' name='uiw_path_" + s.field +"' value='"+file+"'>";
+        if (path != "") {
+            var file = path.split("/").pop();
+            html += "<input type='hidden' name='uiw_path_" + field +"' value='"+file+"'>";
         }
-        html += "<input type='hidden' name='status_" + s.field + "' value='" + status + "' class='uiw-status'>";
+        html += "<input type='hidden' name='status_" + field + "' value='" + status + "' class='uiw-status'>";
         html += "</div>";
-        return html;
-    },
-
-    //only set width, height auto
-    auto: function(s){
-        //var image = new Image();
-        $(s.path).done(function(){
-            var html = "";
-            var file = "";
-            var background = "";
-            var status = "";
-            var has_data = ""
-            var height = this.height / s.width;
-
-            if (s.path !== '') {
-                background = "background-image:url(" + s.path +");";
-                has_data = " has-data";
-                status = "static";
-            }
-
-            html += "<div class='upload-image-widget " + has_data + " "+ s.mode + "' style='width:" + s.width + "px;height:" + height + "px;" + background + "'>";
-            html += "<label class='uiw-image-label'>";
-            html += "<input type='file' name='" + s.field + "' class='uiw-image "+ s.className + "' value=''>";
-            html += "<span>";
-            html += "UPLOAD";
-            html += "</span>";
-            html += "</label>";
-
-            if (s.del) {
-                html += "<div class='uiw-del'>";
-                html += "</div>";
-            } else {
-                html += "<div class='uiw-remove'>";
-                html += "</div>";
-            }
-            html += "<div class='uiw-change'>";
-            html += "</div>";
-            if (s.path != "") {
-                file = s.path.split("/").pop();
-                html += "<input type='hidden' name='uiw_path_" + s.field +"' value='"+file+"'>";
-            }
-            html += "<input type='hidden' name='status_" + s.field + "' value='" + status + "' class='uiw-status'>";
-            html += "</div>";
-            return html;
-        });
-    },
-
-    generate: function(source){
-        var _source = {
-            field: 'upload',
-            width: '300',
-            height: '300',
-            path: '',
-            mode: "cover",
-            del: false
-        };
-        var html = "";
-        
-        $.extend(_source, source);
-
-        if (this.status == "inactive"){
-            this.init();
-        }
-
-        switch(_source.mode) {
-            case "cover":
-            case "contain":
-                html = this.fixed(_source);
-            break;
-            case "auto":
-                html = this.auto(_source);
-                console.log(html);
-            break;
-        }
         return html;
     }
 };

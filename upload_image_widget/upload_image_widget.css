@@ -1,21 +1,11 @@
 /*upload-image-widget*/
 .upload-image-widget{
     position:relative;
-    background-color:#000000;
+    background-color:#aaa;
     background-repeat:no-repeat;
     background-position:center;
-    min-width: 300px;
-    min-height: 300px;
-}
-
-.upload-image-widget.cover{
     background-size:cover;
 }
-
-.upload-image-widget.contain{
-    background-size:contain;
-}
-
 .upload-image-widget .uiw-image{
     display:none;
 }

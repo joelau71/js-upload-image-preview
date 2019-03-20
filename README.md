@@ -24,10 +24,10 @@ use js preview the image upload
 ```
 
 ## attribute:<br>
-data-uiw-width;<br>
-data-uiw-height;<br>
-data-uiw-mode;//auto, cover default:cover<br>
-data-uiw-del;//boolean, default:false
+data-uiw-width; //number default: 300<br>
+data-uiw-height; //number default: 0<br>
+data-uiw-mode; //auto, cover default: cover<br>
+data-uiw-del; //boolean, default: false
 
 ## method:
 generate();

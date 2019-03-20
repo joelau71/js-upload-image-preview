@@ -22,3 +22,8 @@ use js preview the image upload
   </body>
 </html>
 ```
+
+##attribute:
+data-uiw-width;
+data-uiw-height;
+data-uiw-mode;//auto, fixed default:fixed

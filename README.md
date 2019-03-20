@@ -34,7 +34,7 @@ generate();
 
 ```
 const source = {
-  field: "img[]",
+  field: "fieldName", //element name
   width: 280,
   height: 280,
   model: cover,

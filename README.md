@@ -27,7 +27,7 @@ use js preview the image upload
 data-uiw-width; //number default: 300<br>
 data-uiw-height; //number default: 0<br>
 data-uiw-mode; //auto, cover default: cover<br>
-data-uiw-del; //boolean, default: false
+data-uiw-del; //boolean, default: false<br>
 data-uiw-path; //file path, default: null
 
 provide the "data-uiw-path", when you in edit page;

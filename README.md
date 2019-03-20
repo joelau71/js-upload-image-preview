@@ -23,7 +23,23 @@ use js preview the image upload
 </html>
 ```
 
-##attribute:
-data-uiw-width;
-data-uiw-height;
-data-uiw-mode;//auto, fixed default:fixed
+##attribute:<br>
+data-uiw-width;<br>
+data-uiw-height;<br>
+data-uiw-mode;//auto, cover default:cover<br>
+data-uiw-del;//boolean, default:false
+
+##method:
+generate();
+
+```
+const source = {
+  field: "img[]",
+  width: 280,
+  height: 280,
+  model: cover
+  del:true
+},
+const element = upload_image_widget.generate(source);
+$('#parentElement').append(element);
+```

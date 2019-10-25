@@ -199,8 +199,8 @@ $(function(){
                 var $this = $(this);
                 var element = "";
                 var $element = "";
-                var base64 = $this.attr("data-uiw-base64");
-                var path = $this.attr("data-uiw-path");
+                var base64 = $this.attr("data-uiw-base64") || "false";
+                var path = $this.attr("data-uiw-path") || "";
                 
                 if ($this.hasClass("is-upload-image-widget")) return true;
                 if ($this.attr('data-uiw-width') === undefined) {

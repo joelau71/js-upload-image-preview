@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- need jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="upload-image-widget.css">
+    <script src="upload-image-widget.js"></script>
+    
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    
+    <input
+        type="file"
+        name="upload[]"
+        class="upload-image-widget"
+        data-uiw-width="400"
+        data-uiw-height="200"
+        data-uiw-model="contain"
+        data-uiw-path="A.jpg"
+        data-uiw-base64="true"
+    >
+    <div id="area" style="position: relative;">
+
+    </div>
+
+    <div id="add" style="position: relative;">Add</div>
+    <script>
+        $(function(){
+            $("#add").on("click", function(){
+                $('#area').append(`<input type="file" name="upload[]" class="upload-image-widget" data-uiw-width="300" data-uiw-base64="true">`);
+                uploadImageWidget.update();
+            });
+        });
+    </script>
+  </body>
+</html>

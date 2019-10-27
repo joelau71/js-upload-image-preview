@@ -23,6 +23,9 @@ $(function(){
                 var height = $this.attr("data-uiw-height");
                 var base64 = $this.attr("data-uiw-base64");
                 var path = $this.val();
+
+                if(path == "") return false;
+
                 var file = path.split("\\").pop();
                 var file_type = file.split(".").pop();
 

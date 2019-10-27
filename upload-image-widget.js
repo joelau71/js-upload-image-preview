@@ -26,7 +26,7 @@ $(function(){
                 var file = path.split("\\").pop();
                 var file_type = file.split(".").pop();
 
-                if (file_type != "jpg" && file_type != "jpeg" &&  file_type != "png" && file_type != "svg") {
+                if (file_type != "" && file_type != "jpg" && file_type != "jpeg" &&  file_type != "png" && file_type != "svg") {
                     $wrapper.find(".uiw-remove").click();
                     alert("Not support the upload format");
                     return false;
@@ -35,6 +35,9 @@ $(function(){
                 var source = URL.createObjectURL(this.files[0]);
                 if ($wrapper.hasClass('auto')){
                     $wrapper.addClass("has-data update auto");
+                    $wrapper.css({
+                        width: width
+                    });
                     $wrapper.find('.uiw-element-img').attr("src", source);
                 } else {
                     $wrapper.css({
@@ -73,10 +76,11 @@ $(function(){
                 var $input = $wrapper.find(".uiw-image");
                 var $base64 = $wrapper.find("uiw-base64");
 
+                $wrapper.removeAttr("style");
+
                 if ($wrapper.hasClass('auto')){
                     $wrapper.find('.uiw-element-img').attr("src", '');   
                 } else {
-                    $wrapper.removeAttr("style");
                     $wrapper.css("background-image", "");
                 }
 
@@ -108,25 +112,25 @@ $(function(){
             if (path !== '') {
                 var width = $element.attr("data-uiw-width");
                 var height = $element.attr("data-uiw-height");
-                style = ` style="width:${width}px;height:${height}px;background-image:url(${path});"`;
+                style = 'style="width:' + width + 'px;height:' + height + 'px;background-image:url(' + path +');"';
                 has_data = " has-data";
                 status = "static";
                 file = path.split("/").pop();
             }
 
-            html = `<div class="upload-image-widget-wrapper ${model}${has_data}"${style}>
-                <label class="uiw-image-label">
-                    ${element}
-                    <span class="uiw-btn">
-                        UPLOAD
-                    </span>
-                </label>
-                <div class="uiw-remove"></div>
-                <div class="uiw-change"></div>
-                <input type="hidden" name="uiw_base64_${field}" value="" class="uiw-base64">
-                <input type="hidden" name="uiw_file_${field}" value="${file}" class="uiw-file">
-                <input type="hidden" name="uiw_status_${field}" value="${status}" class="uiw-status">
-            </div>`;
+            html = '<div class="upload-image-widget-wrapper ' + model + has_data + '"' + style + '>';
+            html += '<label class="uiw-image-label">';
+            html += element
+            html += '<span class="uiw-btn">';
+            html += 'UPLOAD';
+            html += '</span>';
+            html += '</label>';
+            html += '<div class="uiw-remove"></div>';
+            html += '<div class="uiw-change"></div>';
+            html += '<input type="hidden" name="uiw_base64_' + field +'" value="" class="uiw-base64">';
+            html += '<input type="hidden" name="uiw_file_' + field + '" value="${file}" class="uiw-file">';
+            html += '<input type="hidden" name="uiw_status_' + field + '" value="${status}" class="uiw-status">';
+            html +=  '</div>';
             return html;
         },
 
@@ -153,20 +157,20 @@ $(function(){
                 file = path.split("/").pop();
             }
 
-            html = `<div class="upload-image-widget-wrapper auto ${has_data}">
-                <img src="${path}" class="uiw-element-img" style="width:${width}px">
-                <label class="uiw-image-label">
-                    ${element}
-                    <span class="uiw-btn">
-                        UPLOAD
-                    </span>
-                </label>
-                <div class="uiw-remove"></div>
-                <div class="uiw-change"></div>
-                <input type="hidden" name="uiw_base64_${field}" value="" class="uiw-base64">
-                <input type="hidden" name="uiw_file_${field}" value="${file}" class="uiw-file">
-                <input type="hidden" name="uiw_status_${field}" value="${status}" class="uiw-status">
-            </div>`;
+            html = '<div class="upload-image-widget-wrapper auto '+ has_data + '" style="width:'+ width + 'px">'
+            html += '<img src="' + path + '" class="uiw-element-img" >';
+            html += '<label class="uiw-image-label">';
+            html += element
+            html += '<span class="uiw-btn">';
+            html += 'UPLOAD';
+            html += '</span>';
+            html += '</label>';
+            html += '<div class="uiw-remove"></div>';
+            html += '<div class="uiw-change"></div>'
+            html += '<input type="hidden" name="uiw_base64_${field}" value="" class="uiw-base64">';
+            html += '<input type="hidden" name="uiw_file_' + field + '" value="' + file + '" class="uiw-file">';
+            html += '<input type="hidden" name="uiw_status_' + field + '" value="' + status + '" class="uiw-status">';
+            html += '</div>';
             return html;
         },
 

@@ -74,7 +74,7 @@ $(function(){
                 var $wrapper = $this.closest(".upload-image-widget-wrapper");
                 var $status = $wrapper.find(".uiw-status");
                 var $input = $wrapper.find(".uiw-image");
-                var $base64 = $wrapper.find("uiw-base64");
+                var $base64 = $wrapper.find(".uiw-base64");
 
                 $wrapper.removeAttr("style");
 
@@ -84,6 +84,7 @@ $(function(){
                     $wrapper.css("background-image", "");
                 }
 
+                $wrapper.find(".uiw-file").val("");
                 $wrapper.removeClass("has-data");
                 $status.val("remove");
                 $input.val("");
@@ -128,8 +129,8 @@ $(function(){
             html += '<div class="uiw-remove"></div>';
             html += '<div class="uiw-change"></div>';
             html += '<input type="hidden" name="uiw_base64_' + field +'" value="" class="uiw-base64">';
-            html += '<input type="hidden" name="uiw_file_' + field + '" value="${file}" class="uiw-file">';
-            html += '<input type="hidden" name="uiw_status_' + field + '" value="${status}" class="uiw-status">';
+            html += '<input type="hidden" name="uiw_file_' + field + '" value="' + file +'" class="uiw-file">';
+            html += '<input type="hidden" name="uiw_status_' + field + '" value="' + status + '" class="uiw-status">';
             html +=  '</div>';
             return html;
         },
@@ -167,7 +168,7 @@ $(function(){
             html += '</label>';
             html += '<div class="uiw-remove"></div>';
             html += '<div class="uiw-change"></div>'
-            html += '<input type="hidden" name="uiw_base64_${field}" value="" class="uiw-base64">';
+            html += '<input type="hidden" name="uiw_base64_' + field + '" value="" class="uiw-base64">';
             html += '<input type="hidden" name="uiw_file_' + field + '" value="' + file + '" class="uiw-file">';
             html += '<input type="hidden" name="uiw_status_' + field + '" value="' + status + '" class="uiw-status">';
             html += '</div>';

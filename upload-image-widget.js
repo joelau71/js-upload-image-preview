@@ -28,6 +28,8 @@ $(function(){
 
                 var file = path.split("\\").pop();
                 var file_type = file.split(".").pop();
+                
+                file = file.replace(/ /g,"_");
 
                 if (file_type != "" && file_type != "jpg" && file_type != "jpeg" &&  file_type != "png" && file_type != "svg") {
                     $wrapper.find(".uiw-remove").click();

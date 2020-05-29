@@ -7,14 +7,16 @@
     data-uiw-model="contain" -> model:cover/contain, default: cover
     data-uiw-path="A.jpg"
     data-uiw-base64="true"
+    data-uiw-delete="true/false" 
+    data-uiw-remove="true/false" 
 > */
 
-$(function(){
+$(function () {
     uploadImageWidget = {
-        init: function(){
+        init: function () {
             this.update();
             this.$body = $("body");
-            this.$body.delegate(".uiw-image", "change", function(){
+            this.$body.delegate(".uiw-image", "change", function () {
                 var $this = $(this);
                 var self = this;
                 var $wrapper = $this.closest(".upload-image-widget-wrapper");
@@ -24,21 +26,21 @@ $(function(){
                 var base64 = $this.attr("data-uiw-base64");
                 var path = $this.val();
 
-                if(path == "") return false;
+                if (path == "") return false;
 
                 var file = path.split("\\").pop();
                 var file_type = file.split(".").pop();
-                
-                file = file.replace(/ /g,"_");
 
-                if (file_type != "" && file_type != "jpg" && file_type != "jpeg" &&  file_type != "png" && file_type != "svg") {
+                file = file.replace(/ /g, "_");
+
+                if (file_type != "" && file_type != "jpg" && file_type != "jpeg" && file_type != "png" && file_type != "svg") {
                     $wrapper.find(".uiw-remove").click();
                     alert("Not support the upload format");
                     return false;
                 }
 
                 var source = URL.createObjectURL(this.files[0]);
-                if ($wrapper.hasClass('auto')){
+                if ($wrapper.hasClass('auto')) {
                     $wrapper.addClass("has-data update auto");
                     $wrapper.css({
                         width: width
@@ -57,48 +59,54 @@ $(function(){
 
                 if (base64) {
                     var reader = new FileReader();
-                    reader.onload = function(){
+                    reader.onload = function () {
                         var source = reader.result;
                         $wrapper.find(".uiw-base64").val(source);
                     };
                     reader.readAsDataURL(self.files[0]);
                 }
-                
+
                 $status.val("upload");
             });
 
-            this.$body.delegate(".uiw-change", "click", function(){
+            this.$body.delegate(".uiw-change", "click", function () {
                 var $this = $(this);
                 var $wrapper = $this.closest(".upload-image-widget-wrapper");
                 var $label = $wrapper.find(".uiw-image-label");
                 $label.find("input").click();
             });
 
-            this.$body.delegate(".uiw-remove", "click", function(){
+            this.$body.delegate(".uiw-remove", "click", function () {
                 var $this = $(this);
                 var $wrapper = $this.closest(".upload-image-widget-wrapper");
                 var $status = $wrapper.find(".uiw-status");
                 var $input = $wrapper.find(".uiw-image");
                 var $base64 = $wrapper.find(".uiw-base64");
+                var remove = $wrapper.find(".upload-image-widget").attr('data-uiw-remove') || "true";
 
-                $wrapper.removeAttr("style");
-
-                if ($wrapper.hasClass('auto')){
-                    $wrapper.find('.uiw-element-img').attr("src", '');   
+                if (remove === "true") {
+                    $wrapper.remove();
                 } else {
-                    $wrapper.css("background-image", "");
-                }
 
-                $wrapper.find(".uiw-file").val("");
-                $wrapper.removeClass("has-data");
-                $status.val("remove");
-                $input.val("");
-                $base64.val("");
+                    $wrapper.removeAttr("style");
+
+                    if ($wrapper.hasClass('auto')) {
+                        $wrapper.find('.uiw-element-img').attr("src", '');
+                    } else {
+                        $wrapper.css("background-image", "");
+                    }
+
+                    $wrapper.find(".uiw-file").val("");
+                    $wrapper.removeClass("has-data");
+                    $status.val("remove");
+                    $input.val("");
+                    $base64.val("");
+                }
             });
         },
 
         //set width and height, but effect cover or contain
-        fixed: function($element){
+        fixed: function ($element) {
 
             var html = "";
             var file = "";
@@ -109,16 +117,17 @@ $(function(){
             var field = $element.attr("name");
             var path = $element.attr("data-uiw-path") || "";
             var model = $element.attr("data-uiw-model") || "cover";
+            var deleteAble = $element.attr("data-uiw-delete") || "true";
 
             $element.addClass("is-upload-image-widget uiw-image");
 
-            var obj = $('<div>').append($element.clone()).html(); 
+            var obj = $('<div>').append($element.clone()).html();
             var element = new String(obj);
 
             if (path !== '') {
                 var width = $element.attr("data-uiw-width");
                 var height = $element.attr("data-uiw-height");
-                style = 'style="width:' + width + 'px;height:' + height + 'px;background-image:url(' + path +');"';
+                style = 'style="width:' + width + 'px;height:' + height + 'px;background-image:url(' + path + ');"';
                 has_data = " has-data";
                 status = "static";
                 file = path.split("/").pop();
@@ -131,17 +140,22 @@ $(function(){
             html += 'UPLOAD';
             html += '</span>';
             html += '</label>';
-            html += '<div class="uiw-remove"></div>';
-            html += '<div class="uiw-change"></div>';
-            html += '<input type="hidden" name="uiw_base64_' + field +'" value="" class="uiw-base64">';
-            html += '<input type="hidden" name="uiw_file_' + field + '" value="' + file +'" class="uiw-file">';
+            if (deleteAble === "true") {
+                html += '<div class="uiw-remove"></div>';
+                html += '<div class="uiw-change"></div>';
+            } else {
+                html += '<div class="uiw-change" style="right:0"></div>';
+            }
+
+            html += '<input type="hidden" name="uiw_base64_' + field + '" value="" class="uiw-base64">';
+            html += '<input type="hidden" name="uiw_file_' + field + '" value="' + file + '" class="uiw-file">';
             html += '<input type="hidden" name="uiw_status_' + field + '" value="' + status + '" class="uiw-status">';
-            html +=  '</div>';
+            html += '</div>';
             return html;
         },
 
         //only set width, height auto
-        auto: function($element){
+        auto: function ($element) {
 
             var html = "";
             var file = "";
@@ -151,10 +165,11 @@ $(function(){
             var field = $element.attr("name");
             var width = $element.attr("data-uiw-width");
             var path = $element.attr("data-uiw-path") || "";
+            var deleteAble = $element.attr("data-uiw-delete") || "true";
 
             $element.addClass("is-upload-image-widget uiw-image");
 
-            var obj = $('<div>').append($element.clone()).html(); 
+            var obj = $('<div>').append($element.clone()).html();
             var element = new String(obj);
 
             if (path !== '') {
@@ -163,7 +178,7 @@ $(function(){
                 file = path.split("/").pop();
             }
 
-            html = '<div class="upload-image-widget-wrapper auto '+ has_data + '" style="width:'+ width + 'px">'
+            html = '<div class="upload-image-widget-wrapper auto ' + has_data + '" style="width:' + width + 'px">'
             html += '<img src="' + path + '" class="uiw-element-img" >';
             html += '<label class="uiw-image-label">';
             html += element
@@ -171,8 +186,13 @@ $(function(){
             html += 'UPLOAD';
             html += '</span>';
             html += '</label>';
-            html += '<div class="uiw-remove"></div>';
-            html += '<div class="uiw-change"></div>'
+            if (deleteAble === "true") {
+                html += '<div class="uiw-remove"></div>';
+                html += '<div class="uiw-change"></div>';
+            } else {
+                html += '<div class="uiw-change" style="right:0"></div>';
+            }
+
             html += '<input type="hidden" name="uiw_base64_' + field + '" value="" class="uiw-base64">';
             html += '<input type="hidden" name="uiw_file_' + field + '" value="' + file + '" class="uiw-file">';
             html += '<input type="hidden" name="uiw_status_' + field + '" value="' + status + '" class="uiw-status">';
@@ -180,7 +200,7 @@ $(function(){
             return html;
         },
 
-        convertToBase64: function($element, path){
+        convertToBase64: function ($element, path) {
             var img = new Image();
             var $base64_element = $element.find(".uiw-base64");
             img.onload = function () {
@@ -192,7 +212,7 @@ $(function(){
                 canvas.height = img.height;
                 canvas.width = img.width;
                 ctx.drawImage(img, 0, 0);
-    
+
                 if (type == 'png') {
                     file = canvas.toDataURL('image/png');
                 } else {
@@ -203,15 +223,15 @@ $(function(){
             img.src = path;
         },
 
-        update: function() {
+        update: function () {
             var self = this;
-            $(".upload-image-widget").each(function(){
+            $(".upload-image-widget").each(function () {
                 var $this = $(this);
                 var element = "";
                 var $element = "";
                 var base64 = $this.attr("data-uiw-base64") || "false";
                 var path = $this.attr("data-uiw-path") || "";
-                
+
                 if ($this.hasClass("is-upload-image-widget")) return true;
                 if ($this.attr('data-uiw-width') === undefined) {
                     console.log("Error: upload image widget need set data-uiw-width");
@@ -224,11 +244,11 @@ $(function(){
 
                 if (base64 === "true" && path != "") {
                     self.convertToBase64($element, path);
-                } 
+                }
             });
         },
 
-        generate: function($element){
+        generate: function ($element) {
             if ($element.attr('data-uiw-height') === undefined) {
                 return this.auto($element);
             } else {
